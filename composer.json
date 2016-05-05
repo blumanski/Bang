@@ -1,0 +1,13 @@
+{
+    "name": "blumanski/bang",
+    "description": "Simple php framework core",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "blumanski",
+            "email": "blumanski@gmail.com"
+        }
+    ],
+    "require": {}
+}
