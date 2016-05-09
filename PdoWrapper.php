@@ -39,6 +39,12 @@ class PdoWrapper
     private $CNF = array();
     
     /**
+     * Instance of Redis
+     * @var object
+     */
+    private $Redis;
+    
+    /**
      * Set up the class
      * The config is injected by the main controller
      * This class is only called once, the constructor will call the connection method.
@@ -79,12 +85,25 @@ class PdoWrapper
             }
             
                 // Will be redis, soon
-//             if($this->CNF['database']['memcached'] === true) {
-//             	$this->startMemchached();
-//             }
+            if($this->CNF['database']['redis'] === true) {
+            	$this->startRedis();
+            }
         }
         
         return true;
+    }
+    
+    /**
+     * Prepare Redis for caching
+     */
+    private function startRedis()
+    {
+    	if(isset($this->CNF['dbredis']) && $this->CNF['dbredis']['hosts'] != '') {
+    		
+    		$this->Redis	= new \Redis();
+    		$this->Redis->connect($this->CNF['dbredis']['hosts'], $this->CNF['dbredis']['port']);
+    		$this->Redis->auth($this->CNF['dbredis']['auth']);
+    	}
     }
     
     /**
@@ -371,9 +390,11 @@ class PdoWrapper
 	            $uniqueKey = md5($key);
 	            
 	            // in case the key exists it will load the last result set without executing the query via pdo
-	            $fromCache = $this->Mcache->get($uniqueKey);
+	            $fromCache = $this->Redis->get($this->CNF['dbredis']['prefix'].$uniqueKey);
 	            
-	            if ($fromCache) {
+	            $fromCache = json_decode($fromCache, true);
+	            
+	            if (is_array($fromCache) && count($fromCache)) {
 	                // have result and bomb out with an result set
 	                return $fromCache;
 	            }
@@ -529,8 +550,8 @@ class PdoWrapper
     		$key = md5($key);
     		// cache time in minutes
     		$cacheMinutes = $cacheTime * 60;
-    		// add to memcache for n minutes
-    		$this->Mcache->set($key, $result, (time() + (int) $cacheMinutes));
+    		// add to redis for n minutes
+    		$this->Redis->set($this->CNF['dbredis']['prefix'].$id, json_encode($data), (time() + (int) $cacheMinutes));
     	}
     
     	return $result;
@@ -552,10 +573,8 @@ class PdoWrapper
             $key = md5($key);
             // cache time in minutes
             $cacheMinutes = $cacheTime * 60;
-            // add to memcache for n minutes
-            $this->Mcache->set($key, $result, (time() + (int) $cacheMinutes));
-            
-            $poo = $this->Mcache->get($key);
+            // add to redis for n minutes
+            $this->Redis->set($this->CNF['dbredis']['prefix'].$key, json_encode($result), (time() + (int) $cacheMinutes));
         }
     
         return $result;
@@ -578,8 +597,8 @@ class PdoWrapper
             $key = md5($key);
             // cache time in minutes
             $cacheMinutes = $cacheTime * 60;
-            // add to memcache for n minutes
-            $this->Mcache->set($key, $result, (time() + (int) $cacheMinutes));
+            // add to redis for n minutes
+            $this->Redis->set($this->CNF['dbredis']['prefix'].$key, json_encode($result), (time() + (int) $cacheMinutes));
         }
     
         return $result;
@@ -601,8 +620,8 @@ class PdoWrapper
             $key = md5($key);
             // cache time in minutes
             $cacheMinutes = $cacheTime * 60;
-            // add to memcache for n minutes
-            $this->Mcache->set($key, $result, (time() + (int) $cacheMinutes));
+            // add to redis for n minutes
+            $this->Redis->set($this->CNF['dbredis']['prefix'].$key, json_encode($result), (time() + (int) $cacheMinutes));
         }
     
         return $result;
@@ -624,8 +643,8 @@ class PdoWrapper
             $key = md5($key);
             // cache time in minutes
             $cacheMinutes = $cacheTime * 60;
-            // add to memcache for n minutes
-            $this->Mcache->set($key, $result, (time() + (int) $cacheMinutes));
+            // add to redis for n minutes
+            $this->Redis->set($this->CNF['dbredis']['prefix'].$key, json_encode($result), (time() + (int) $cacheMinutes));
         }
     
         return $result;
