@@ -3,11 +3,14 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
  * 
- * This is the bang main controller, all request go through this controller
- * This is the only access point for the whole application.
- * The controller will load the requested module - controller and controllerAction
- * It also is setting up the dependency injection container which is provided 
- * automatically to all dynamically loaded module calls.
+ * This class loads language files and returns and writes language strings
+ * At start of the application the loadMainLanguageFile will be called to load the
+ * appropriate language.
+ * 
+ * Modules can call the addLanguageFile to add their own language files.
+ * 
+ * There are methods to write a language string with option to sanatize the string
+ * Strings can also get combined with dynamic input such as usernames, @see getCombine, combine
  * 
  */
 
