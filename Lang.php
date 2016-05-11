@@ -27,7 +27,6 @@ class Lang
      */
     public $LangLoaded;
     
-    
     public function __construct(){}
     
     /**
