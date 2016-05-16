@@ -76,7 +76,6 @@ class Controller extends SuperController
      */
     private $DI;
     
-    
     /**
      * Constructor, setting up the class environment.
      * @param object $loader
@@ -151,7 +150,6 @@ class Controller extends SuperController
     		$this->View->setMainTemplate(CONFIG['app']['backendmaintpl']);
     	} else {
     		$this->View->setMainTemplate(CONFIG['app']['frontmaintpl']);
-    		
     	}
     	
     	// Translate route to array
@@ -180,7 +178,7 @@ class Controller extends SuperController
     		 
     	} else {
     		 
-    		// If the wasn't working, start over and use an error
+    		// If above wasn't working, start over and use an error
     		// Error is already logged
     		$this->Route['module']        = 'error';
     		$this->Route['controller']    = 'index';
@@ -198,10 +196,10 @@ class Controller extends SuperController
     		}
     	}
     }
-    
 
     /**
      * Prepare the config and db including whitelist table names
+     * @todo May have a hard coded whitelist for tables in production to save one db query
      */
     private function prepareConfig() 
     {
@@ -213,6 +211,7 @@ class Controller extends SuperController
     	$this->PdoWrapper	= new PdoWrapper($cnf);
     	
     	// create whitelist of table names
+    	// For production replace with hard coded list
     	$dbTables   = $this->PdoWrapper->getTableNames();
     	// add the whitelist to the config array
     	$cnf['database']['whitelist'] = $dbTables;
@@ -223,7 +222,7 @@ class Controller extends SuperController
     	// add path to the config constant
     	$cnf['app']['path'] = $directory;
     	
-    	// below I assign the config array to a constant.
+    	// Below I assign the config array to a constant.
     	// must be >= php.5.6
     	// I add the config array to a constant as I do not want the config to change
     	// during runtime. There will be another configuration later in the db (key , value)
@@ -310,8 +309,6 @@ class Controller extends SuperController
     			$this->View = new WebView();
     		}
     	}
-    	
-    	
     }
     
     /**
@@ -366,15 +363,16 @@ class Controller extends SuperController
         $this->DI->$name    = $value;
     }
     
+    /**
+     * @todo Finalise this with config entries and domain
+     */
     private function cors()
     {
-    			
 		header("Access-Control-Allow-Origin: *");
 		header('Access-Control-Allow-Credentials: true');
 		header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE, OPTIONS');
 		header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 		header('Access-Control-Max-Age: 86400');    // cache for 1 day
-    	 
     }
     
     /**

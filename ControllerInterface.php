@@ -22,13 +22,13 @@ interface ControllerInterface
     public function indexAction();
     
     /**
-     * All controlelrs need sort of permission testing
+     * All controllers need permission testing
      */
     public function testPermisions();
     
     /**
      * All controllers need to implement this method to avoid
-     * exposing sensible data
+     * exposing data
      */
     public function __debugInfo();
 }

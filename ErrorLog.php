@@ -47,7 +47,6 @@ class ErrorLog
     		return;
     	}
     	
-    	
         $query = "INSERT INTO `".CONFIG['database']['suffix']."error_log` 
                     (`type`, `message`, `location`, `logtime`)
                   VALUES
@@ -73,6 +72,8 @@ class ErrorLog
     		$message .= $e->getCode();
     		die($message);
     	}
+    	
+    	return false;
     }
     
     /**

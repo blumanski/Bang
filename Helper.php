@@ -27,7 +27,7 @@ class Helper
     }
 
     /**
-     * Is Joson, may a better option later
+     * Is Json
      * @param string $string
      */
     public static function isJson(string $string) : bool 
@@ -41,7 +41,6 @@ class Helper
     }
     
     /**
-     * 
      * @param string $string
      * @param int $count
      * @param string $append
@@ -76,8 +75,9 @@ class Helper
     
     /**
      * Redirect a page
+     * @todo Add more header types
      */
-    public static function redirectTo($url)
+    public static function redirectTo(string $url)
     {
     	if($url == '//') {
     		$url = '/';
@@ -87,8 +87,11 @@ class Helper
         exit;
     }
     
-    
-    public static function getLocationById($ip) {
+    /**
+     * Get a location by ip address
+     * @param string $ip
+     */
+    public static function getLocationById(string $ip) {
     	$url = 'http://api.ipinfodb.com/v3/ip-city/?key='.CONFIRM['app']['ipinfodbapi'].'&ip='.$ip.'&format=json';
     
     	$ch = curl_init();
@@ -330,7 +333,7 @@ class Helper
     
     /**
      * Replace accesnts from string
-     * @param unknown $var
+     * @param string $string
      * @return mixed
      */
     public static function replace_accents(string $string){ 
