@@ -3,8 +3,14 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
  *
- * Small class, big effect.
- * Silent error logging, should be always on.
+ * This error logger is logging errors silently and writing them to the database.
+ * I use this to log database errors and application errors.
+ * This should always run as appliction monitor.
+ * 
+ * Every single sql request has this error log in the catch condition.
+ * You dont want to miss out on sql errors.
+ * 
+ * Errors logged will show up on the backend application dashboard.
  */
 
 Namespace Bang;

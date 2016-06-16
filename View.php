@@ -3,6 +3,8 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
  * 
+ * This is View, all views inerhit from view.
+ * It provides mandatory class vars and methods.
  */
 
 Namespace Bang;

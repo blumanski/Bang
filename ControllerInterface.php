@@ -3,7 +3,7 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-09
  *
- * Interface for all controllers
+ * Interface for all module controllers
  */
 
 Namespace Bang;
@@ -11,7 +11,6 @@ Namespace Bang;
 /**
  * ControllerInterface is implemented by all module controllers.
  * It defines the minimum methods that must be available in a module controller.
- * @author oliver
  *
  */
 interface ControllerInterface 

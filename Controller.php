@@ -4,14 +4,27 @@
  * @date 2016-01-02
  * 
  * This is bang main controller, all requests go through this controller.
- * This is the only access point for the application.
- * The controller will load the requested module - controller and controllerAction.
- * If a module - controller or action is not available it will load an error response.
- * Further, the controller is setting up the dependency container and is starting the core classes.
- * Finally, it is adding the modules namespace to the autoloader.
+ * This is the only access point in to the application.
  * 
- * The class is extending SuperController which does not have much in it yet,
- * it can be used in the future to implement more features which are needed in all controllers.
+ * The controller is selecting the module, is loading the controller 
+ * and is calling the end point (action method) in the controller.
+ * 
+ * Routing
+ * The routing is, at the moment, based on module name, conrtoller name 
+ * and action method name. There is no routing list for now.
+ * 
+ * Routing in the future
+ * Later on, there will be a routing file with all routes to make it fast.
+ * This will be attached to a database solution so that urls can get handled on interface level.
+ * There will, may, be a file with the routing list generated each time or something in that direction.
+ * Ideally there won't be a database request to find the route and deflect to the right module - controller - action.
+ * 
+ * Ajax Requests
+ * There is a cors method which allows at has set a wildcard at the moment, this will get replaced later on by a 
+ * proper config setting on interface level.
+ * Ajax is going through the same process as get requests, just the output is using a different template and the data is
+ * formed as wanted (json).
+ * This means that still all framework authentication methods are available for ajax requests, which is a good thing.
  */
 
 Namespace Bang;
@@ -82,7 +95,7 @@ class Controller extends SuperController
      */
     public function __construct(\Loader\Autoloader $loader)
     {
-    	// Get config, start db class, whitelist tablenames and set config to constant
+    	// Get config, start db class, whitelist tablen ames and set config to constant
         $this->prepareConfig();
         $this->startApplication($loader);
     }
@@ -211,7 +224,7 @@ class Controller extends SuperController
     	$this->PdoWrapper	= new PdoWrapper($cnf);
     	
     	// create whitelist of table names
-    	// For production replace with hard coded list
+// Todo // For production replace with hard coded list!
     	$dbTables   = $this->PdoWrapper->getTableNames();
     	// add the whitelist to the config array
     	$cnf['database']['whitelist'] = $dbTables;
@@ -225,7 +238,7 @@ class Controller extends SuperController
     	// Below I assign the config array to a constant.
     	// must be >= php.5.6
     	// I add the config array to a constant as I do not want the config to change
-    	// during runtime. There will be another configuration later in the db (key , value)
+    	// during runtime (read only). There will be another configuration later in the db (key , value)
     	define('CONFIG', $cnf);
     	// unset the config so it can't be used anymore
     	// one must use the constant from now on
@@ -234,6 +247,7 @@ class Controller extends SuperController
     
     /**
      * Get the route
+     * This route is the getting the real name - module - controller - action route
      */
     private function getRoute()
     {

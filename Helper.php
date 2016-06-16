@@ -3,19 +3,20 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
  * 
- * Helper class for static tasks, basically all functions in here are static.
+ * Helper class for static tasks, basically all functions in here are static and can
+ * get called from anywhere in the application.
  */
 
 Namespace Bang;
 
 class Helper
 {
-    
-    /**
+
+	/**
      * Return true if a request is an ajax request
      * @return boolean
      */
-    public static function isAjax()
+    public static function isAjax() : bool
     {
         $_SERVER['HTTP_X_REQUESTED_WITH'] = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
         
@@ -74,6 +75,7 @@ class Helper
     }
     
     /**
+     * @Todo Need to get more sophisticated with header
      * Redirect a page
      * @todo Add more header types
      */
@@ -123,7 +125,7 @@ class Helper
     
     
     /**
-     * Get the ip address of a request
+     * Get the ip address
      */
     public static function getClientIp() 
     {
@@ -168,6 +170,8 @@ class Helper
      * @see $this->Router->getRoute()
      * 
      * @Note $_POST data is unchanged and dealt with when used
+     * 
+     * This is more a placeholder for now and will get further functionality.
      * 
      * @param string $type
      * @return unknown|multitype:

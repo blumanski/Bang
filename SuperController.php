@@ -3,13 +3,9 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
  * 
- * This is the bang main controller, all request go through this controller
- * This is the only access point for the whole application.
- * The controller will load the requested module - controller and controllerAction
- * It also is setting up the dependency injection container which is provided 
- * automatically to all dynamically loaded module calls.
- * 
- * Anything in this framework is a module call.
+ * This is the bang SuperController
+ * All module controllers and the main controller inerhit from this controller.
+ * Basically, just some methods which are useful for all controllers.
  */
 
 Namespace Bang;

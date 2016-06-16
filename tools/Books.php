@@ -4,6 +4,8 @@
  * @date 2016-04-03
  *
  * Very simple way to search the google book api for some useful data regardign a book
+ * 
+ * Is work in progress
  */
 
 Namespace Bang\Tools;

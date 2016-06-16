@@ -3,6 +3,13 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
  * 
+ * The responder view is a bit simpler and is used for ajax requests.
+ * As those outputs are json, there is not much rendering needed as in the web view.
+ * 
+ * One can use this or the web view to create an individual view and use it.
+ * The view can get changed on module level.
+ * 
+ * So, one would be able to add soemthing like smarty as view.
  */
 
 Namespace Bang;

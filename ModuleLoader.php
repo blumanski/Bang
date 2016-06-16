@@ -3,7 +3,7 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-03-20
  *
- * Is loading the module controller action
+ * The ModuleLoader is loading the module - controller - action
  */
 
 Namespace Bang;

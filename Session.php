@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author Oliver Blum <blumanski@gmail.com>
+ * 
+ * Dealing with session data
+ *
+ */
 
 Namespace Bang;
 

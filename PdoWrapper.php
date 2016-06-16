@@ -5,9 +5,12 @@
  * 
  * PdoWrapper class
  * This class is adding additional features to the php pdo wrapper
- * Such as result caching and slow query log
+ * Such as result caching using redis and slow query log for finding bottle necks
+ * and help with query optimization.
  * 
- * @todo Redis query result cache
+ * The slow query log should never be on except for a few hours to collect test data.
+ * There is a view in the database which already is sorting and calculating the results.
+ * 
  */
 
 Namespace Bang;

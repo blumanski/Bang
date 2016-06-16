@@ -3,11 +3,11 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
  * 
- * This is the bang main controller, all request go through this controller
- * This is the only access point for the whole application.
- * The controller will load the requested module - controller and controllerAction
- * It also is setting up the dependency injection container which is provided 
- * automatically to all dynamically loaded module calls.
+ * Class Lang handles the languages.
+ * It is loading the mandatory language file at start.
+ * On module level one can add module related language files.
+ * 
+ * The class also provides methods to write, combine or return translated text.
  * 
  */
 

@@ -3,8 +3,7 @@
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
  * 
- * Super class which is extends all model classes
- * Not much in here yet... work in progress...
+ * Provides functionality to all application and module models.
  */
 namespace Bang;
 
