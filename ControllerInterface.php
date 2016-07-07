@@ -5,26 +5,25 @@
  *
  * Interface for all module controllers
  */
-
-Namespace Bang;
+namespace Bang;
 
 /**
  * ControllerInterface is implemented by all module controllers.
  * It defines the minimum methods that must be available in a module controller.
- *
  */
-interface ControllerInterface 
+interface ControllerInterface
 {
+
     /**
      * All controllers must have an indexAction method
      */
     public function indexAction();
-    
+
     /**
      * All controllers need permission testing
      */
     public function testPermisions();
-    
+
     /**
      * All controllers need to implement this method to avoid
      * exposing data

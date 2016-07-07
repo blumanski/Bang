@@ -11,6 +11,7 @@ Use Exception;
 
 class SuperModel
 {
+
     /**
      * Return the database table name which is to inject
      * into the query
