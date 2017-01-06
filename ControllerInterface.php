@@ -13,7 +13,6 @@ namespace Bang;
  */
 interface ControllerInterface
 {
-
     /**
      * All controllers must have an indexAction method
      */

@@ -2,7 +2,7 @@
 /**
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
- * 
+ *
  * Helper class for static tasks, basically all functions in here are static and can
  * get called from anywhere in the application.
  */
@@ -13,40 +13,40 @@ class Helper
 
     /**
      * Return true if a request is an ajax request
-     * 
+     *
      * @return boolean
      */
     public static function isAjax(): bool
     {
         $_SERVER['HTTP_X_REQUESTED_WITH'] = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
-        
+
         if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             return true;
         }
-        
+
         return false;
     }
 
     /**
      * Is Json
-     * 
-     * @param string $string            
+     *
+     * @param string $string
      */
     public static function isJson(string $string): bool
     {
         if ((int) $string > 0) {
             return false;
         }
-        
+
         @json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
     /**
      *
-     * @param string $string            
-     * @param int $count            
-     * @param string $append            
+     * @param string $string
+     * @param int $count
+     * @param string $append
      * @return string|\Bang\string|string
      */
     public static function cutString(string $string, int $count, string $append = NULL)
@@ -55,14 +55,14 @@ class Helper
             $string = mb_substr($string, 0, (int) $count) . '' . $append;
             return $string;
         }
-        
+
         return $string;
     }
 
     /**
      * Decode ajax vars which may have been encoded
-     * 
-     * @param array $data            
+     *
+     * @param array $data
      */
     public static function prepareAjaxValues(array $data)
     {
@@ -70,17 +70,17 @@ class Helper
             foreach ($data as $key => $value) {
                 $data[$key] = rawurldecode($value);
             }
-            
+
             return $data;
         }
-        
+
         return false;
     }
 
     /**
      * @Todo Need to get more sophisticated with header
      * Redirect a page
-     * 
+     *
      * @todo Add more header types
      */
     public static function redirectTo(string $url)
@@ -95,13 +95,13 @@ class Helper
 
     /**
      * Get a location by ip address
-     * 
-     * @param string $ip            
+     *
+     * @param string $ip
      */
     public static function getLocationById(string $ip)
     {
         $url = 'http://api.ipinfodb.com/v3/ip-city/?key=' . CONFIRM['app']['ipinfodbapi'] . '&ip=' . $ip . '&format=json';
-        
+
         $ch = curl_init();
         $timeout = 5;
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -109,14 +109,14 @@ class Helper
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         $data = curl_exec($ch);
         curl_close($ch);
-        
+
         return @json_decode($data, true);
     }
 
     /**
      * Found this on: http://stackoverflow.com/a/31107425/5294587
-     * 
-     * @param int $length            
+     *
+     * @param int $length
      */
     public static function generateCode(int $length)
     {
@@ -126,7 +126,7 @@ class Helper
         for ($i = 0; $i < $length; ++ $i) {
             $str .= $keyspace[random_int(0, $max)];
         }
-        
+
         return $str;
     }
 
@@ -136,35 +136,35 @@ class Helper
     public static function getClientIp()
     {
         $ipaddress = '';
-        
+
         if (isset($_SERVER['HTTP_CLIENT_IP']) && filter_var($_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            
+
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-        } else 
+        } else
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                
+
                 $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            } else 
+            } else
                 if (isset($_SERVER['HTTP_X_FORWARDED']) && filter_var($_SERVER['HTTP_X_FORWARDED'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                    
+
                     $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-                } else 
+                } else
                     if (isset($_SERVER['HTTP_FORWARDED_FOR']) && filter_var($_SERVER['HTTP_FORWARDED_FOR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        
+
                         $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-                    } else 
+                    } else
                         if (isset($_SERVER['HTTP_FORWARDED']) && filter_var($_SERVER['HTTP_FORWARDED'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                            
+
                             $ipaddress = $_SERVER['HTTP_FORWARDED'];
-                        } else 
+                        } else
                             if (isset($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                                
+
                                 $ipaddress = $_SERVER['REMOTE_ADDR'];
                             } else {
-                                
+
                                 $ipaddress = 'UNKNOWN';
                             }
-        
+
         return $ipaddress;
     }
 
@@ -172,30 +172,30 @@ class Helper
      * @Note $_GET was already transformed by router
      * The core parameters are validated by the strict application rules (module/controller/action)
      * All other variables are still raw and will get dealt with where there are used.
-     * 
+     *
      * @see $this->Router->getRoute() @Note $_POST data is unchanged and dealt with when used
-     *     
+     *
      *      This is more a placeholder for now and will get further functionality.
-     *     
-     * @param string $type            
+     *
+     * @param string $type
      * @return unknown|multitype:
      */
     public static function getRequestParams(string $type)
     {
         $_SERVER['PATH_INFO'] = $_SERVER['PATH_INFO'] ?? '';
-        
+
         $request = explode("/", mb_substr($_SERVER['PATH_INFO'], 1, mb_strlen($_SERVER['PATH_INFO'], 'UTF-8'), 'UTF-8'));
-        
+
         switch (strtolower($type)) {
-            
+
             case 'get':
                 return $_GET;
                 break;
-            
+
             case 'post':
                 return $_POST;
                 break;
-            
+
             case 'files':
                 return $_FILES;
                 break;
@@ -204,16 +204,16 @@ class Helper
 
     /**
      * Return
-     * 
-     * @param string $string            
-     * @param int $cost            
+     *
+     * @param string $string
+     * @param int $cost
      */
     public static function passwordHash(string $string, int $cost)
     {
         if ((int) $cost > 15) {
             return false;
         }
-        
+
         return password_hash($string, PASSWORD_BCRYPT, array(
             "cost" => (int) $cost
         ));
@@ -227,22 +227,22 @@ class Helper
         if (mb_strlen($value, 'UTF-8') > $max) {
             return false;
         }
-        
+
         switch ($type) {
-            
+
             // raw text
             case 'raw':
                 return true;
                 break;
-            
+
             case 'ip':
-                
+
                 if (filter_var($value, FILTER_VALIDATE_IP)) {
                     return true;
                 }
-                
+
                 break;
-            
+
             case 'username':
                 // use unicode to validate username, well, allows language specific usernames too
                 // String must start with letter, upper or lower case
@@ -250,33 +250,33 @@ class Helper
                 // string can contain numbers
                 // preg_match retruns 1|0 instead of bool
                 return preg_match('/^[\p{Lu}|\p{Ll}][\p{L}|\p{N}]*(?:\p{Pd}[\p{L}|\p{N}]+)*$/u', $value) === 1 ? true : false;
-                
+
                 // Alternative code or fallback, more conservative version but still utf-8
                 // return preg_match('/^[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*$/u', $value);
-                
+
                 break;
-            
+
             case 'email':
                 // filter returns the filtered value instead of true
                 if (filter_var($value, FILTER_VALIDATE_EMAIL) !== false) {
                     return true;
                 }
                 break;
-            
+
             // alpha
             case 'alpha':
                 if (ctype_alpha($value)) {
                     return true;
                 }
                 break;
-            
+
             case 'module':
                 if (ctype_alpha($value)) {
                     return true;
                 }
-                
+
                 break;
-            
+
             case 'password':
                 if (strlen($value) > 7) {
                     // > 5
@@ -290,27 +290,27 @@ class Helper
                 }
                 return false;
                 break;
-            
+
             case 'keys':
-                
+
                 $allowed = array(
                     "-",
                     "_"
                 );
-                
+
                 if (ctype_alnum(str_replace($allowed, '', $value))) {
                     return true;
                 }
-                
+
                 break;
-            
+
             // alpha numeric
             case 'alphanum':
                 if (ctype_alnum($value)) {
                     return true;
                 }
                 break;
-            
+
             // integer
             case 'int':
                 if (filter_var($value, FILTER_VALIDATE_INT) !== false) {
@@ -318,16 +318,16 @@ class Helper
                 }
                 break;
         }
-        
+
         return false;
     }
 
     /**
      * Sanitize a filename
-     * 
-     * @param string $string            
-     * @param bool $force_lowercase            
-     * @param bool $anal            
+     *
+     * @param string $string
+     * @param bool $force_lowercase
+     * @param bool $anal
      */
     public static function sanitizeUrl(string $string, bool $force_lowercase = true, bool $anal = false)
     {
@@ -342,7 +342,7 @@ class Helper
             '.',
             ''
         ), $string);
-        
+
         $strip = array(
             "~",
             "`",
@@ -390,8 +390,8 @@ class Helper
 
     /**
      * Replace accesnts from string
-     * 
-     * @param string $string            
+     *
+     * @param string $string
      * @return mixed
      */
     public static function replace_accents(string $string)
@@ -715,7 +715,7 @@ class Helper
             'ת' => 't',
             '™' => 'tm'
         );
-        
+
         return strtr($string, $replace);
     }
 
@@ -725,25 +725,25 @@ class Helper
     public static function getTiemzoneList()
     {
         $timezones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
-        
+
         $timezone_offsets = array();
         foreach ($timezones as $timezone) {
             $tz = new \DateTimeZone($timezone);
             $timezone_offsets[$timezone] = $tz->getOffset(new \DateTime());
         }
-        
+
         // sort timezone by offset
         asort($timezone_offsets);
-        
+
         $timezone_list = array();
         foreach ($timezone_offsets as $timezone => $offset) {
             $offset_prefix = $offset < 0 ? '-' : '+';
             $offset_formatted = gmdate('H:i', abs($offset));
-            
+
             $pretty_offset = "UTC${offset_prefix}${offset_formatted}";
             $timezone_list[$timezone] = "(${pretty_offset}) $timezone";
         }
-        
+
         return $timezone_list;
     }
 }

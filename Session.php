@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Oliver Blum <blumanski@gmail.com>
- * 
+ *
  * Dealing with session data
  *
  */
@@ -17,7 +17,7 @@ class Session
         ini_set('session.use_only_cookies', 1);
         @session_name("bangsess");
         @ini_set('session.gc_maxlifetime', CONFIG['app']['sessionlength']);
-        
+
         @session_start();
         // set session id
         $_SESSION['bangsess'] = session_id();
@@ -28,7 +28,7 @@ class Session
         $_SESSION['app']['warning'] = $_SESSION['app']['warning'] ?? array();
         $_SESSION['app']['success'] = $_SESSION['app']['success'] ?? array();
         $_SESSION['formData'] = $_SESSION['formData'] ?? array();
-        
+
         $this->setUpGuestUser();
     }
 
@@ -50,7 +50,7 @@ class Session
 
     /**
      * Reset token
-     * 
+     *
      * @return boolean
      */
     public function resetToken()
@@ -66,13 +66,13 @@ class Session
     {
         $user = $this->getUser();
         $ip = \Bang\Helper::getClientIp();
-        
+
         if (\Bang\Helper::validate($ip, 'ip', 15) === false) {
             $ip = '';
         }
-        
+
         if (! isset($user['username']) || empty($user['username'])) {
-            
+
             $this->setToUser('id', 0);
             $this->setToUser('username', 'Guest');
             $this->setToUser('ip', $ip);
@@ -88,7 +88,7 @@ class Session
     {
         $warning = $_SESSION['app']['warning'];
         $_SESSION['app']['warning'] = '';
-        
+
         return $warning;
     }
 
@@ -99,7 +99,7 @@ class Session
     {
         $error = $_SESSION['app']['error'];
         $_SESSION['app']['error'] = '';
-        
+
         return $error;
     }
 
@@ -110,14 +110,14 @@ class Session
     {
         $success = $_SESSION['app']['success'];
         $_SESSION['app']['success'] = '';
-        
+
         return $success;
     }
 
     /**
      * set an error
-     * 
-     * @param string $value            
+     *
+     * @param string $value
      */
     public function setError($value)
     {
@@ -126,8 +126,8 @@ class Session
 
     /**
      * set an error
-     * 
-     * @param string $value            
+     *
+     * @param string $value
      */
     public function setWarning($value)
     {
@@ -136,8 +136,8 @@ class Session
 
     /**
      * set success message
-     * 
-     * @param string $value            
+     *
+     * @param string $value
      */
     public function setSuccess($value)
     {
@@ -155,8 +155,8 @@ class Session
     /**
      * Set post data to session for reuse on current form on error
      * So, that the form is prefilled after en error came up and the form is reloaded
-     * 
-     * @param array $data            
+     *
+     * @param array $data
      */
     public function setPostData(array $data)
     {
@@ -173,38 +173,38 @@ class Session
 
     /**
      * Test if the current user has a particular permission assigned
-     * 
-     * @param int $id            
+     *
+     * @param int $id
      */
     public function hasPermission($id)
     {
         $permissions = $this->getCurrentUsersPermisionsArray();
-        
+
         if (is_array($permissions) && isset($permissions['allPermissions']) && isset($permissions['allPermissions'][$id])) {
             return true;
         }
-        
+
         return false;
     }
 
     /**
      * Test if the current user is memeber in a particular group
-     * 
-     * @param int $id            
+     *
+     * @param int $id
      */
     public function isMemberOfGroupWithId(int $groupid): bool
     {
         $permissions = $this->getCurrentUsersPermisionsArray();
-        
+
         if (isset($_SESSION['user']['perms']) && is_array($_SESSION['user']['perms'])) {
-            
+
             foreach ($_SESSION['user']['perms'] as $key => $value) {
                 if (isset($value['groupid']) && (int) $value['groupid'] == (int) $groupid) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -216,15 +216,15 @@ class Session
         if (isset($_SESSION['user']['perms']) && is_array($_SESSION['user']['perms'])) {
             return $_SESSION['user']['perms'];
         }
-        
+
         return false;
     }
 
     /**
      * Set a user variable, overwrites existing keys
-     * 
-     * @param string $key            
-     * @param mixed $value            
+     *
+     * @param string $key
+     * @param mixed $value
      */
     public function setToUser(string $key, $value)
     {
@@ -232,7 +232,7 @@ class Session
             throw new \Exception('Key must be alpha-numeric.');
             die();
         }
-        
+
         $_SESSION['user'][$key] = $value;
     }
 
@@ -245,7 +245,7 @@ class Session
             throw new \Exception('Key must be alpha-numeric.');
             die();
         }
-        
+
         $_SESSION[$key] = $value;
     }
 
@@ -258,7 +258,7 @@ class Session
             throw new \Exception('Key must be alpha-numeric.');
             die();
         }
-        
+
         return $_SESSION[$key];
     }
 
@@ -278,13 +278,13 @@ class Session
         if (isset($_SESSION['user']['id']) && (int) $_SESSION['user']['id'] > 0) {
             return $_SESSION['user']['id'];
         }
-        
+
         return false;
     }
 
     /**
      * return curent users email address
-     * 
+     *
      * @return string|boolean
      */
     public function getUserEmail()
@@ -292,7 +292,7 @@ class Session
         if (isset($_SESSION['user']['email']) && ! empty($_SESSION['user']['email'])) {
             return $_SESSION['user']['email'];
         }
-        
+
         return false;
     }
 
@@ -304,7 +304,7 @@ class Session
         if (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] != '') {
             return $_SESSION['user']['lang'];
         }
-        
+
         return false;
     }
 
@@ -318,20 +318,20 @@ class Session
     public function loggedIn($login = false)
     {
         $user = $this->getUser();
-        
+
         // 1. test for user id
         if (is_array($user) && isset($user['id']) && (int) $user['id'] > 0) {
-            
+
             // 2. test if accountid exists
             if (isset($user['accountid']) && (int) $user['accountid'] > 0) {
-                
+
                 // 3. test session time
                 if (isset($user['session_start'])) {
-                    
+
                     if ($login === true) {
                         return true;
                     }
-                    
+
                     // test if the session has run out
                     if ((strtotime($user['session_start']) + (int) CONFIG['app']['sessionlength']) >= time()) {
                         return true;
@@ -339,7 +339,7 @@ class Session
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -355,7 +355,7 @@ class Session
         $_SESSION = array();
         $_GET = array();
         $_POST = array();
-        
+
         header('location: ' . $path);
         exit();
     }

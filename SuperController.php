@@ -2,7 +2,7 @@
 /**
  * @author Oliver Blum <blumanski@gmail.com>
  * @date 2016-01-02
- * 
+ *
  * This is the bang SuperController
  * All module controllers and the main controller inerhit from this controller.
  * Basically, just some methods which are useful for all controllers.
@@ -11,7 +11,6 @@ namespace Bang;
 
 class SuperController
 {
-
     /**
      * send 404 header
      */
@@ -60,31 +59,31 @@ class SuperController
     public function changeLanguage()
     {
         $params = Helper::getRequestParams('get');
-        
+
         if (is_array($params) && isset($params['lang'])) {
-            
+
             if (isset(CONFIG['langwhitelist'][$params['lang']])) {
-                
+
                 \Locale::setDefault(CONFIG['langwhitelist'][$params['lang']]);
-                
+
                 $lastPage = '/';
-                
+
                 if (isset($_SERVER['HTTP_REFERER'])) {
                     // test url
                     $url = parse_url($_SERVER['HTTP_REFERER']);
-                    
+
                     if (is_array($url) && isset($url['host']) && $url['host'] == CONFIG['app']['backendurl']) {
                         $lastPage = $_SERVER['HTTP_REFERER'];
                     }
                 }
-                
+
                 $this->Session->setToUser('lang', CONFIG['langwhitelist'][$params['lang']]);
-                
+
                 Helper::redirectTo($lastPage);
                 exit();
             }
         }
-        
+
         die();
     }
 }
